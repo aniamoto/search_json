@@ -15,6 +15,13 @@ class SearchService
 
   private
 
+  def format_result
+    @data.each_with_object([]) do |object, memo|
+      next unless phase_found?(object)
+      memo << format_object(object)
+    end
+  end
+
   def phase_found?(object)
     case object
     when Enumerable
@@ -24,20 +31,18 @@ class SearchService
     end
   end
 
-  def format_result
-    @data.each_with_object([]) do |object, memo|
-      next unless phase_found?(object)
-      memo << format_object(object)
-    end
-  end
-
   def format_object(object)
     object.map { |k, v| format_hash(k, v) }.join("\n") + "\n" + '-' * 100 + "\n"
   end
 
   def format_hash(key, value)
     key = key.to_s.gsub('_', ' ').strip.capitalize
-    value = case value
+    value = format_value(value)
+    "#{key}: #{value}"
+  end
+
+  def format_value(value)
+    case value
     when Array
       value.join(', ')
     when Hash
@@ -47,7 +52,5 @@ class SearchService
     else
       value
     end
-
-    "#{key}: #{value}"
   end
 end

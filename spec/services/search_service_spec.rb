@@ -23,7 +23,7 @@ describe SearchService do
       }
     ]
   end
-  let(:target) { 'Melbourne' }
+  let(:target) { 'melb' }
   let(:target_not_found) { 'Nothing123' }
 
   describe '#perform' do
